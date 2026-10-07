@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymath OS</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- FontAwesome for layout icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for advanced data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-polymath"></i>
+                <h2>Polymath</h2>
+            </div>
+            <nav>
+                <button class="nav-btn active" data-tab="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+                <button class="nav-btn" data-tab="tasks"><i class="fa-solid fa-list-check"></i> Tasks</button>
+                <button class="nav-btn" data-tab="achievements"><i class="fa-solid fa-trophy"></i> Achievements</button>
+            </nav>
+            <div class="sidebar-footer">
+                <p>The future belongs to those who learn more skills and combine them in creative ways</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- DASHBOARD TAB -->
+            <section id="dashboard" class="tab-content active">
+                <header class="tab-header">
+                    <h1>Welcome Back, Scholar</h1>
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="global-search" placeholder="Search tasks, domains, tags...">
+                    </div>
+                </header>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card icon-card">
+                        <div class="stat-icon xp-icon"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="stat-info">
+                            <h3>Total XP</h3>
+                            <p id="stat-xp">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card icon-card">
+                        <div class="stat-icon rank-icon"><i class="fa-solid fa-crown"></i></div>
+                        <div class="stat-info">
+                            <h3>Current Rank</h3>
+                            <p id="stat-rank">Novice</p>
+                            <span class="subtext" id="stat-next-rank">100 XP to next rank</span>
+                        </div>
+                    </div>
+                    <div class="stat-card icon-card">
+                        <div class="stat-icon domains-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                        <div class="stat-info">
+                            <h3>Domains Explored</h3>
+                            <p id="stat-domains">0 / 0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card icon-card">
+                        <div class="stat-icon trophy-icon"><i class="fa-solid fa-trophy"></i></div>
+                        <div class="stat-info">
+                            <h3>Achievements</h3>
+                            <p id="stat-achievements">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Stats Row -->
+                <div class="secondary-stats">
+                    <div class="stat-sub-card">
+                        <span>Most Active Domain</span>
+                        <strong id="stat-most-active">-</strong>
+                    </div>
+                    <div class="stat-sub-card">
+                        <span>Least Active Domain</span>
+                        <strong id="stat-least-active">-</strong>
+                    </div>
+                    <div class="stat-sub-card">
+                        <span>Avg. Tasks / Day</span>
+                        <strong id="stat-avg-tasks">0.0</strong>
+                    </div>
+                </div>
+
+                <!-- Middle Visualization Row -->
+                <div class="dashboard-row grid-2-1">
+                    <!-- XP Analytics Graph -->
+                    <div class="dashboard-block chart-block">
+                        <div class="block-header">
+                            <h3>XP Progression Analytics</h3>
+                            <div class="time-filters">
+                                <button class="filter-btn active" data-filter="today">Today</button>
+                                <button class="filter-btn" data-filter="week">Week</button>
+                                <button class="filter-btn" data-filter="month">Month</button>
+                                <button class="filter-btn" data-filter="year">Year</button>
+                                <button class="filter-btn" data-filter="all">All Time</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="xpProgressionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Daily Goal Tracker -->
+                    <div class="dashboard-block goal-block">
+                        <h3>Daily Objective Target</h3>
+                        <div class="goal-container">
+                            <div class="goal-progress-circle">
+                                <svg>
+                                    <circle cx="70" cy="70" r="60"></circle>
+                                    <circle cx="70" cy="70" r="60" id="goal-progress-bar"></circle>
+                                </svg>
+                                <div class="goal-text">
+                                    <span id="goal-fraction">0/3</span>
+                                    <small>Tasks</small>
+                                </div>
+                            </div>
+                            <p id="goal-status" class="goal-status-text">Keep pushes forward!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Heatmap and Domain Progress Row -->
+                <div class="dashboard-row grid-1-1">
+                    <!-- Calendar Heatmap -->
+                    <div class="dashboard-block">
+                        <h3>Consistency Map (Past Year)</h3>
+                        <div class="heatmap-wrapper">
+                            <div id="calendar-heatmap" class="heatmap-grid"></div>
+                        </div>
+                        <div class="heatmap-legend">
+                            <span>Less</span>
+                            <div class="legend-box level-0"></div>
+                            <div class="legend-box level-1"></div>
+                            <div class="legend-box level-2"></div>
+                            <div class="legend-box level-3"></div>
+                            <div class="legend-box level-4"></div>
+                            <span>More XP</span>
+                        </div>
+                    </div>
+
+                    <!-- Smart Insights & Distribution -->
+                    <div class="dashboard-block">
+                        <h3>Domain Level Distribution</h3>
+                        <div id="domain-progress-bars" class="domain-progress-container">
+                            <!-- Injected dynamically -->
+                        </div>
+                        <hr class="block-divider">
+                        <h3>Smart Insights Engine</h3>
+                        <div id="smart-insights" class="insights-container">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Allocation breakdown row -->
+                <div class="dashboard-row">
+                    <div class="dashboard-block chart-block-wide">
+                        <h3>Domain Allocation Breakdown</h3>
+                        <div class="pie-chart-layout">
+                            <div class="pie-wrapper">
+                                <canvas id="domainPieChart"></canvas>
+                            </div>
+                            <div id="pie-legend-custom" class="pie-legend-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TASKS TAB -->
+            <section id="tasks" class="tab-content">
+                <header class="tab-header">
+                    <h1>Task Forge</h1>
+                </header>
+                
+                <div class="task-management-layout">
+                    <!-- Task Creation Panel -->
+                    <div class="task-form-panel">
+                        <h3>Forge New Objective</h3>
+                        <form id="task-form">
+                            <div class="form-group">
+                                <label for="task-title">Objective Title</label>
+                                <input type="text" id="task-title" placeholder="e.g., Master Advanced Python decorators" required>
+                            </div>
+                            <div class="form-group row-2">
+                                <div>
+                                    <label for="task-domain">Domain Spectrum</label>
+                                    <select id="task-domain" required>
+                                        <option value="Coding">Coding</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Science">Science</option>
+                                        <option value="Logic">Logic</option>
+                                        <option value="Philosophy">Philosophy</option>
+                                        <option value="Literature">Literature</option>
+                                        <option value="Language">Language</option>
+                                        <option value="Art">Art</option>
+                                        <option value="Music">Music</option>
+                                        <option value="Fitness">Fitness</option>
+                                        <option value="Mindfulness">Mindfulness</option>
+                                        <option value="Hobbies">Hobbies</option>
+                                        <option value="Business">Business</option>
+                                        <option value="Study">Study</option>
+                                        <option value="General">General</option>
+                                        </select>
+                                </div>
+                                <div>
+                                    <label for="task-difficulty">Difficulty Tier</label>
+                                    <select id="task-difficulty" required>
+                                        <option value="Easy">Easy (+10 XP)</option>
+                                        <option value="Medium" selected>Medium (+20 XP)</option>
+                                        <option value="Hard">Hard (+40 XP)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="submit-btn"><i class="fa-solid fa-plus"></i> Instantiate Objective</button>
+                        </form>
+                    </div>
+
+                    <!-- Live Task Board -->
+                    <div class="task-board-panel">
+                        <div class="board-header">
+                            <h3>Active Matrices</h3>
+                            <div class="board-filters">
+                                <button class="board-filter-btn active" data-board-filter="all">All</button>
+                                <button class="board-filter-btn" data-board-filter="pending">Pending</button>
+                                <button class="board-filter-btn" data-board-filter="completed">Completed</button>
+                            </div>
+                        </div>
+                        <div id="task-list" class="task-cards-grid">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ACHIEVEMENTS TAB -->
+            <section id="achievements" class="tab-content">
+                <header class="tab-header">
+                    <h1>Hall of Achievements</h1>
+                </header>
+                <div id="achievements-grid" class="achievements-grid">
+                    <!-- Injected dynamically -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
